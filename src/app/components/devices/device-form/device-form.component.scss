@@ -1,0 +1,78 @@
+.device-form-container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-card {
+  padding: 20px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  
+  mat-spinner {
+    margin-bottom: 16px;
+  }
+}
+
+.device-form {
+  .form-row {
+    margin-bottom: 20px;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+  }
+}
+
+mat-card-header {
+  margin-bottom: 20px;
+}
+
+mat-icon {
+  color: #666;
+}
+
+mat-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+mat-spinner {
+  margin-right: 10px;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .device-form-container {
+    padding: 10px;
+  }
+
+  .form-card {
+    padding: 15px;
+  }
+
+  .device-form .form-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+
+    button {
+      width: 100%;
+    }
+  }
+}
