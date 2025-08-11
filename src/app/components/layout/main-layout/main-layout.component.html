@@ -1,21 +1,20 @@
 <div class="main-layout">
-  <!-- Toolbar -->
   <mat-toolbar color="primary" class="toolbar">
     <button mat-icon-button (click)="navigateToDevices()">
       <mat-icon>device_hub</mat-icon>
     </button>
-    
+
     <span class="app-name">Snapbot - Gestão de Dispositivos</span>
-    
+
     <span class="spacer"></span>
-    
+
     <div *ngIf="currentUser$ | async as user" class="user-menu">
       <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
         <mat-icon>account_circle</mat-icon>
         <span class="user-name">{{ user.name }}</span>
         <mat-icon>keyboard_arrow_down</mat-icon>
       </button>
-      
+
       <mat-menu #userMenu="matMenu">
         <div class="user-info">
           <p class="user-email">{{ user.email }}</p>
@@ -29,7 +28,6 @@
     </div>
   </mat-toolbar>
 
-  <!-- Content -->
   <div class="content">
     <router-outlet></router-outlet>
   </div>

@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -22,10 +27,10 @@ import { NotificationService } from '../../../services/notification.service';
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
@@ -46,7 +51,7 @@ export class LoginComponent implements OnInit {
   private createForm(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -61,9 +66,10 @@ export class LoginComponent implements OnInit {
         },
         error: (error) => {
           this.loading = false;
-          const message = error.error?.message || 'Erro ao fazer login. Tente novamente.';
+          const message =
+            error.error?.message || 'Erro ao fazer login. Tente novamente.';
           this.notificationService.showError(message);
-        }
+        },
       });
     }
   }

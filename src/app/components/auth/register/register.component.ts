@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  AbstractControl,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -22,10 +28,10 @@ import { NotificationService } from '../../../services/notification.service';
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrl: './register.component.scss',
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
@@ -45,23 +51,30 @@ export class RegisterComponent implements OnInit {
   }
 
   private createForm(): void {
-    this.registerForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      password_confirmation: ['', [Validators.required]]
-    }, { validators: this.passwordMatchValidator });
+    this.registerForm = this.fb.group(
+      {
+        name: ['', [Validators.required, Validators.minLength(2)]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        password_confirmation: ['', [Validators.required]],
+      },
+      { validators: this.passwordMatchValidator }
+    );
   }
 
-  private passwordMatchValidator(control: AbstractControl): { [key: string]: any } | null {
+  private passwordMatchValidator(
+    control: AbstractControl
+  ): { [key: string]: any } | null {
     const password = control.get('password');
     const passwordConfirmation = control.get('password_confirmation');
-    
+
     if (!password || !passwordConfirmation) {
       return null;
     }
-    
-    return password.value === passwordConfirmation.value ? null : { passwordMismatch: true };
+
+    return password.value === passwordConfirmation.value
+      ? null
+      : { passwordMismatch: true };
   }
 
   onSubmit(): void {
@@ -75,9 +88,10 @@ export class RegisterComponent implements OnInit {
         },
         error: (error) => {
           this.loading = false;
-          const message = error.error?.message || 'Erro ao criar conta. Tente novamente.';
+          const message =
+            error.error?.message || 'Erro ao criar conta. Tente novamente.';
           this.notificationService.showError(message);
-        }
+        },
       });
     }
   }

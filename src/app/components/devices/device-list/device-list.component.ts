@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 
-// Angular Material imports
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
@@ -45,25 +44,29 @@ import { NotificationService } from '../../../services/notification.service';
     MatChipsModule,
     MatMenuModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   templateUrl: './device-list.component.html',
-  styleUrl: './device-list.component.scss'
+  styleUrl: './device-list.component.scss',
 })
 export class DeviceListComponent implements OnInit, OnDestroy {
   devices: Device[] = [];
-  displayedColumns: string[] = ['name', 'location', 'purchase_date', 'in_use', 'actions'];
+  displayedColumns: string[] = [
+    'name',
+    'location',
+    'purchase_date',
+    'in_use',
+    'actions',
+  ];
   loading = false;
-  
-  // Pagination
+
   totalItems = 0;
   pageSize = 15;
   currentPage = 1;
-  
-  // Filters
+
   filtersForm!: FormGroup;
   private destroy$ = new Subject<void>();
-  
+
   constructor(
     private deviceService: DeviceService,
     private notificationService: NotificationService,
@@ -89,17 +92,13 @@ export class DeviceListComponent implements OnInit, OnDestroy {
       location: [''],
       in_use: [''],
       date_from: [''],
-      date_to: ['']
+      date_to: [''],
     });
   }
 
   private setupFilterSubscriptions(): void {
     this.filtersForm.valueChanges
-      .pipe(
-        takeUntil(this.destroy$),
-        debounceTime(500),
-        distinctUntilChanged()
-      )
+      .pipe(takeUntil(this.destroy$), debounceTime(500), distinctUntilChanged())
       .subscribe(() => {
         this.currentPage = 1;
         this.saveFiltersToStorage();
@@ -129,11 +128,10 @@ export class DeviceListComponent implements OnInit, OnDestroy {
     const filters: DeviceFilters = {
       page: this.currentPage,
       per_page: this.pageSize,
-      ...this.filtersForm.value
+      ...this.filtersForm.value,
     };
 
-    // Remove empty filters
-    Object.keys(filters).forEach(key => {
+    Object.keys(filters).forEach((key) => {
       const value = filters[key as keyof DeviceFilters];
       if (value === '' || value === null || value === undefined) {
         delete filters[key as keyof DeviceFilters];
@@ -149,7 +147,7 @@ export class DeviceListComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.loading = false;
         this.notificationService.showError('Erro ao carregar dispositivos');
-      }
+      },
     });
   }
 
@@ -162,16 +160,20 @@ export class DeviceListComponent implements OnInit, OnDestroy {
   toggleDeviceUse(device: Device): void {
     this.deviceService.toggleDeviceUse(device.id).subscribe({
       next: (response) => {
-        const index = this.devices.findIndex(d => d.id === device.id);
+        const index = this.devices.findIndex((d) => d.id === device.id);
         if (index !== -1) {
           this.devices[index].in_use = response.data.in_use;
         }
         const status = response.data.in_use ? 'em uso' : 'disponível';
-        this.notificationService.showSuccess(`Dispositivo marcado como ${status}`);
+        this.notificationService.showSuccess(
+          `Dispositivo marcado como ${status}`
+        );
       },
       error: (error) => {
-        this.notificationService.showError('Erro ao alterar status do dispositivo');
-      }
+        this.notificationService.showError(
+          'Erro ao alterar status do dispositivo'
+        );
+      },
     });
   }
 
@@ -183,12 +185,14 @@ export class DeviceListComponent implements OnInit, OnDestroy {
     if (confirm('Tem certeza que deseja excluir este dispositivo?')) {
       this.deviceService.deleteDevice(device.id).subscribe({
         next: () => {
-          this.notificationService.showSuccess('Dispositivo excluído com sucesso');
+          this.notificationService.showSuccess(
+            'Dispositivo excluído com sucesso'
+          );
           this.loadDevices();
         },
         error: (error) => {
           this.notificationService.showError('Erro ao excluir dispositivo');
-        }
+        },
       });
     }
   }

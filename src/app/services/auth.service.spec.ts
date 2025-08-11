@@ -23,7 +23,6 @@ describe('AuthService', () => {
     service = TestBed.inject(AuthService);
     httpMock = TestBed.inject(HttpTestingController);
 
-    // Clear localStorage before each test
     localStorage.clear();
   });
 
@@ -112,7 +111,6 @@ describe('AuthService', () => {
 
   describe('logout', () => {
     it('should clear token and user data', () => {
-      // Set initial data
       localStorage.setItem('token', 'test-token');
       localStorage.setItem(
         'user',

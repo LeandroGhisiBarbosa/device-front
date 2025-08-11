@@ -17,28 +17,29 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['login']);
-    const notificationSpy = jasmine.createSpyObj('NotificationService', ['showSuccess', 'showError']);
+    const notificationSpy = jasmine.createSpyObj('NotificationService', [
+      'showSuccess',
+      'showError',
+    ]);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [
-        LoginComponent,
-        ReactiveFormsModule,
-        NoopAnimationsModule
-      ],
+      imports: [LoginComponent, ReactiveFormsModule, NoopAnimationsModule],
       providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: NotificationService, useValue: notificationSpy },
-        { provide: Router, useValue: routerSpy }
-      ]
+        { provide: Router, useValue: routerSpy },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
-    notificationService = TestBed.inject(NotificationService) as jasmine.SpyObj<NotificationService>;
+    notificationService = TestBed.inject(
+      NotificationService
+    ) as jasmine.SpyObj<NotificationService>;
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-    
+
     fixture.detectChanges();
   });
 
@@ -58,7 +59,7 @@ describe('LoginComponent', () => {
   it('should mark form as valid when all fields are filled correctly', () => {
     component.loginForm.patchValue({
       email: 'test@example.com',
-      password: 'password123'
+      password: 'password123',
     });
     expect(component.loginForm.valid).toBeTruthy();
   });
@@ -88,44 +89,54 @@ describe('LoginComponent', () => {
       success: true,
       message: 'Login successful',
       data: {
-        user: { id: 1, name: 'Test User', email: 'test@example.com', created_at: '', updated_at: '' },
+        user: {
+          id: 1,
+          name: 'Test User',
+          email: 'test@example.com',
+          created_at: '',
+          updated_at: '',
+        },
         token: 'test-token',
-        token_type: 'Bearer'
-      }
+        token_type: 'Bearer',
+      },
     };
 
     authService.login.and.returnValue(of(mockResponse));
 
     component.loginForm.patchValue({
       email: 'test@example.com',
-      password: 'password123'
+      password: 'password123',
     });
 
     component.onSubmit();
 
     expect(authService.login).toHaveBeenCalledWith({
       email: 'test@example.com',
-      password: 'password123'
+      password: 'password123',
     });
-    expect(notificationService.showSuccess).toHaveBeenCalledWith('Login realizado com sucesso!');
+    expect(notificationService.showSuccess).toHaveBeenCalledWith(
+      'Login realizado com sucesso!'
+    );
     expect(router.navigate).toHaveBeenCalledWith(['/app/devices']);
   });
 
   it('should handle login error', () => {
     const mockError = {
-      error: { message: 'Invalid credentials' }
+      error: { message: 'Invalid credentials' },
     };
 
     authService.login.and.returnValue(throwError(() => mockError));
 
     component.loginForm.patchValue({
       email: 'test@example.com',
-      password: 'wrongpassword'
+      password: 'wrongpassword',
     });
 
     component.onSubmit();
 
-    expect(notificationService.showError).toHaveBeenCalledWith('Invalid credentials');
+    expect(notificationService.showError).toHaveBeenCalledWith(
+      'Invalid credentials'
+    );
   });
 
   it('should navigate to register page', () => {
@@ -142,7 +153,7 @@ describe('LoginComponent', () => {
   it('should not submit form when invalid', () => {
     component.loginForm.patchValue({
       email: '',
-      password: ''
+      password: '',
     });
 
     component.onSubmit();
@@ -154,7 +165,7 @@ describe('LoginComponent', () => {
     component.loading = true;
     component.loginForm.patchValue({
       email: 'test@example.com',
-      password: 'password123'
+      password: 'password123',
     });
 
     component.onSubmit();

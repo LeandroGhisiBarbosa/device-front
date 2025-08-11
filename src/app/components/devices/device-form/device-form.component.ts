@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-// Angular Material imports
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -32,10 +36,10 @@ import { Device, DeviceRequest } from '../../../models/device.model';
     MatDatepickerModule,
     MatNativeDateModule,
     MatProgressSpinnerModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './device-form.component.html',
-  styleUrl: './device-form.component.scss'
+  styleUrl: './device-form.component.scss',
 })
 export class DeviceFormComponent implements OnInit {
   deviceForm!: FormGroup;
@@ -62,7 +66,7 @@ export class DeviceFormComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(2)]],
       location: ['', [Validators.required, Validators.minLength(2)]],
       purchase_date: ['', [Validators.required]],
-      in_use: [false, [Validators.required]]
+      in_use: [false, [Validators.required]],
     });
   }
 
@@ -89,7 +93,7 @@ export class DeviceFormComponent implements OnInit {
         this.loading = false;
         this.notificationService.showError('Erro ao carregar dispositivo');
         this.router.navigate(['/app/devices']);
-      }
+      },
     });
   }
 
@@ -100,30 +104,30 @@ export class DeviceFormComponent implements OnInit {
       name: this.device.name,
       location: this.device.location,
       purchase_date: new Date(this.device.purchase_date),
-      in_use: !!this.device.in_use
+      in_use: !!this.device.in_use,
     });
   }
 
   onSubmit(): void {
     if (this.deviceForm.valid && !this.loading) {
       this.loading = true;
-      
+
       const formValue = this.deviceForm.value;
       const deviceData: DeviceRequest = {
         name: formValue.name,
         location: formValue.location,
         purchase_date: this.formatDate(formValue.purchase_date),
-        in_use: formValue.in_use
+        in_use: formValue.in_use,
       };
 
-      const operation = this.isEditMode 
+      const operation = this.isEditMode
         ? this.deviceService.updateDevice(this.deviceId!, deviceData)
         : this.deviceService.createDevice(deviceData);
 
       operation.subscribe({
         next: (response) => {
           this.loading = false;
-          const message = this.isEditMode 
+          const message = this.isEditMode
             ? 'Dispositivo atualizado com sucesso!'
             : 'Dispositivo criado com sucesso!';
           this.notificationService.showSuccess(message);
@@ -131,11 +135,11 @@ export class DeviceFormComponent implements OnInit {
         },
         error: (error) => {
           this.loading = false;
-          const message = this.isEditMode 
+          const message = this.isEditMode
             ? 'Erro ao atualizar dispositivo'
             : 'Erro ao criar dispositivo';
           this.notificationService.showError(message);
-        }
+        },
       });
     }
   }
